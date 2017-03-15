@@ -7,6 +7,6 @@ namespace EIMv1.Models
 {
     public interface IUserRepository
     {
-        IEnumerable<User> Users { get; }
+        Task<UserList> usersAsync();
     }
 }

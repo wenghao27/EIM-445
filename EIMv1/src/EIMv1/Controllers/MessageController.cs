@@ -21,11 +21,11 @@ namespace EIMv1.Controllers
         //supposed to be authorized, not sure if it is a good practice
         //to set up a local DB to just check authentication 
         //[Authorize]
-        public IActionResult Message()
+        public async Task<IActionResult> Message()
         {
             var messageViewModel = new MessageViewModel
             {
-                Users = _UserRepository.Users
+                Users = await _UserRepository.usersAsync()
             };
             string token = Request.Cookies["ACCESS_TOKEN"];
             return View(messageViewModel);

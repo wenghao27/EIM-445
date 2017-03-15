@@ -1,13 +1,13 @@
-﻿using System;
+﻿        using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EIMv1.Models
 {
-    public class FakeUserRepository : IUserRepository
+    public class FakeUserRepository
     {
-        public IEnumerable<User> Users
+        public List<User> usersAsync
         {
 
             //in real repo we would make the call to api to get list of users
@@ -15,9 +15,9 @@ namespace EIMv1.Models
             {
                 return new List<User>
                 {
-                    new User{Name = "Hao W.", Email="sample1@email.com"},
-                    new User{Name = "Byran C.", Email="sample2@email.com"},
-                    new User{Name = "Alex B.", Email="sample3@email.com"}
+                    new User{first_name = "Hao", last_name = "Weng", email="sample1@email.com"},
+                    new User{first_name = "Byran", last_name="Castaneda", email="sample2@email.com"},
+                    new User{first_name = "Alex", last_name = "Bastille", email="sample3@email.com"}
                 };
             }
         }

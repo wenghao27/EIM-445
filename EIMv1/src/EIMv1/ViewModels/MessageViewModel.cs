@@ -8,8 +8,7 @@ namespace EIMv1.ViewModels
 {
     public class MessageViewModel
     {
-        public IEnumerable<User> Users { get; set; }
-
-        public IEnumerable<Message>
+        public UserList Users { get; set; }
+        
     }
 }

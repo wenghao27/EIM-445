@@ -41,7 +41,7 @@ namespace EIMv1
             
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddTransient<IUserRepository, FakeUserRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddMvc();
         }
 

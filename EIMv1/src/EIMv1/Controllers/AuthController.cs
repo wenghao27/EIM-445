@@ -1,4 +1,5 @@
-﻿using EIMv1.ViewModels;
+﻿using EIMv1.Models;
+using EIMv1.ViewModels;
 using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

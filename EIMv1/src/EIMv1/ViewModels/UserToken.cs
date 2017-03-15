@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EIMv1.Models;
 
 namespace EIMv1.ViewModels
 {

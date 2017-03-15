@@ -23,16 +23,19 @@
                        
                     </div>
                 </div>
-                <ul class="list-group">
-                    @foreach (var user in Model.Users)
-                    {
-                        <li class="list-group-item" style="border: none">
-                            <span class="badge">1</span>
-                            @user.Name
-                        </li>
+                <div class="message-user-list-remain">
+                    <ul class="list-group">
+                        @foreach (var user in Model.Users.users)
+                        {
+                            <li class="list-group-item" style="border: none">
+                                <span class="badge">1</span>
+                                @user.first_name @user.last_name
+                            </li>
 
-                    }
-                </ul>
+                        }
+                    </ul>
+                </div>
+                
             </div>
 
             <div class="col-md-height col-xs-9 no-float message-fill panel panel-default message-content">

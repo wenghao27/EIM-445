@@ -89,6 +89,20 @@ code {
 }
 .list-group {
     padding: 10px;
+    height: 100%;
+   
+}
+
+.list-group-item {
+    min-height: 45px;
+}
+
+.message-user-list-remain {
+    padding: 10px;
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    width: 100%;
 }
 
 /*Message*/

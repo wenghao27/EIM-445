@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace EIMv1.Models
 {
-    public static class APIHandler
+    public class UserList
     {
 
-       
+        public List<User> users { get; set; }
     }
 }
