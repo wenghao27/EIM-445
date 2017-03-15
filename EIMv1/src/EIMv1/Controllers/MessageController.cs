@@ -23,21 +23,14 @@ namespace EIMv1.Controllers
         //[Authorize]
         public IActionResult Message()
         {
-
-
             var messageViewModel = new MessageViewModel
             {
                 Users = _UserRepository.Users
             };
-
+            string token = Request.Cookies["ACCESS_TOKEN"];
             return View(messageViewModel);
         }
 
-
-
-
-        
-
-
+       
     }
 }
