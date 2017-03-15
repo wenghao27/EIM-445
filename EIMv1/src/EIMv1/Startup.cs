@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using EIMv1.Models;
 
 namespace EIMv1
 {
@@ -39,6 +40,8 @@ namespace EIMv1
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddTransient<IUserRepository, FakeUserRepository>();
+
             services.AddMvc();
         }
 
@@ -68,7 +71,7 @@ namespace EIMv1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=App}/{action=Index}/{id?}"
+                    template: "{controller=Auth}/{action=Login}/{id?}"
                  
                     );
             });
