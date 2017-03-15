@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace EIMv1
 {
@@ -36,9 +37,11 @@ namespace EIMv1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            
             services.AddMvc();
         }
 
@@ -63,6 +66,18 @@ namespace EIMv1
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationScheme = "MyCookieInstance",
+                LoginPath = new PathString("/login"),
+                AutomaticAuthenticate =true,
+                AutomaticChallenge = true,
+                CookieSecure = env.IsDevelopment()
+                ? Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest
+                : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always
+
+            });
 
             app.UseMvc(routes =>
             {

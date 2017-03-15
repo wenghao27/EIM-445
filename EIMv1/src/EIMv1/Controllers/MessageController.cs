@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,10 @@ namespace EIMv1.Controllers
         //[Authorize]
         public IActionResult Message()
         {
-
+            string token = Request.Cookies["ACCESS_TOKEN"];
             return View();
         }
 
+      
     }
 }

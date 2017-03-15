@@ -1,18 +1,18 @@
 ﻿using EIMv1.ViewModels;
 using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EIMv1.Controllers.Web
 {
     public class AuthController : Controller
     {
+      
         public IActionResult Signup()
         {
             //ADD Todo: if user been authenticated, redirect to messaging page
@@ -26,6 +26,7 @@ namespace EIMv1.Controllers.Web
         [HttpPost]
         public async Task<IActionResult> SignUp(SignupViewModel model)
         {
+           
             if (ModelState.IsValid)
             {
                 try
@@ -67,6 +68,7 @@ namespace EIMv1.Controllers.Web
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vModel, string returnUrl)
         {
+            string cookie = Request.Cookies["myTest"];
             if (ModelState.IsValid)
             {
                 HttpResponseMessage responseMessage =
@@ -77,15 +79,17 @@ namespace EIMv1.Controllers.Web
                                  password = vModel.Password
 
                              });
-                //var signInResult = await _signInManager
-                //                  .PasswordSignInAsync(vModel.Username, vModel.Password, true, false);
+                string auth = await responseMessage.Content.ReadAsStringAsync();
+                UserToken ut = JsonConvert.DeserializeObject<UserToken>(auth);
+
+                Response.Cookies.Append("ACCESS_TOKEN", ut.auth_token);
+               
+               
+              
                 if (responseMessage.IsSuccessStatusCode)
                 {
-                    // var result = await _signInManager.PasswordSignInAsync(vModel.Username, vModel.Password, true, false);
-                    // if (result.Succeeded)
-                    //  {
+             
                     return RedirectToAction("Message", "Message");
-                    //  }
 
                 }
             }
