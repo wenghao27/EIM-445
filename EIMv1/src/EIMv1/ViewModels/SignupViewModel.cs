@@ -19,5 +19,9 @@ namespace EIMv1.ViewModels
 
         [Required]
         public string PasswordConfirm { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
     }
 }
