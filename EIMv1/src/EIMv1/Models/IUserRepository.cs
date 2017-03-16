@@ -7,6 +7,6 @@ namespace EIMv1.Models
 {
     public interface IUserRepository
     {
-        Task<UserList> usersAsync();
+        Task<UserList> usersAsync(string token);
     }
 }

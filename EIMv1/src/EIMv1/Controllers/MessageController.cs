@@ -23,11 +23,13 @@ namespace EIMv1.Controllers
         //[Authorize]
         public async Task<IActionResult> Message()
         {
+            string token = Request.Cookies["ACCESS_TOKEN"];
+
             var messageViewModel = new MessageViewModel
             {
-                Users = await _UserRepository.usersAsync()
+                Users = await _UserRepository.usersAsync(token)
             };
-            string token = Request.Cookies["ACCESS_TOKEN"];
+            
             return View(messageViewModel);
         }
 
