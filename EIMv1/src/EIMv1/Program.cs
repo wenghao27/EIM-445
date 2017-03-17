@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using EIMv1.Encryption;
 
 namespace EIMv1
 {
@@ -11,6 +12,8 @@ namespace EIMv1
     {
         public static void Main(string[] args)
         {
+            byte[] keys = RSAService.RSAKeyGeneration();
+            AESService.Test();
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
