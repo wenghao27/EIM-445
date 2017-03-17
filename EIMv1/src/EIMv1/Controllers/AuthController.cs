@@ -35,7 +35,9 @@ namespace EIMv1.Controllers.Web
                     HttpResponseMessage responseMessage = await "https://chronoschat.co/registration".PostUrlEncodedAsync(new
                     {
                         email = model.Username.ToString(),
-                        password = model.Password.ToString()
+                        password = model.Password.ToString(),
+                        first_name = model.FirstName,
+                        last_name = model.LastName
 
                     });
                     if (responseMessage.IsSuccessStatusCode)
