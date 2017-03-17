@@ -24,17 +24,17 @@
                     </div>
                 </div>
                 <div class="message-user-list-remain">
-                    <ul class="list-group">
+                    <div class="list-group">
                         @foreach (var user in Model.Users.users)
                         {
-                            <li class="list-group-item" style="border: none">
-                                <span class="badge">1</span>
-                                @user.first_name @user.last_name
-                            </li>
-
+                            <a asp-controller="Message" , asp-action="Message" asp-route-id="@user.last_name" class="list-group-item list-group-item-action">
+                                <h5>
+                                    @user.first_name @user.last_name
+                                </h5>
+                            </a>
                         }
-                    </ul>
-                </div>
+                    </div>
+              </div>
                 
             </div>
 

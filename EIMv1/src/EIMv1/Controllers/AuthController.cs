@@ -69,7 +69,6 @@ namespace EIMv1.Controllers.Web
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vModel, string returnUrl)
         {
-            string cookie = Request.Cookies["myTest"];
             if (ModelState.IsValid)
             {
                 HttpResponseMessage responseMessage =

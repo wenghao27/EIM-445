@@ -88,17 +88,23 @@ code {
     width: 100%;
 }
 .list-group {
-    padding: 10px;
+    padding: 0px;
     height: 100%;
+    margin-bottom: 0px;
    
 }
 
 .list-group-item {
+    border: none;
+}
+
+.list-group a {
+    text-align: center;
     min-height: 45px;
 }
 
 .message-user-list-remain {
-    padding: 10px;
+    padding: 0px;
     position: absolute;
     top: 50px;
     bottom: 0;

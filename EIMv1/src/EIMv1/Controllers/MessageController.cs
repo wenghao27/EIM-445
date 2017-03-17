@@ -3,6 +3,7 @@ using EIMv1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,20 @@ namespace EIMv1.Controllers
             
             return View(messageViewModel);
         }
+
+        [Route("Message/Message/{id}")]
+        public async Task<IActionResult> Message(string id)
+        {
+            string token = Request.Cookies["ACCESS_TOKEN"];
+
+            var messageViewModel = new MessageViewModel
+            {
+                Users = await _UserRepository.usersAsync(token)
+            };
+            Debug.WriteLine("second message");
+            return View("Message", messageViewModel);
+        }
+
 
        
     }
