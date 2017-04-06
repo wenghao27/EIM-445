@@ -1,0 +1,12 @@
+﻿@model UserListViewModel
+
+<div class="list-group">
+    @foreach (var user in Model.Users.users)
+    {
+        <a asp-controller="MessageDataController" , asp-action="GetUser" asp-route-id="@user.last_name" class="list-group-item list-group-item-action">
+            <h5>
+                @user.first_name @user.last_name
+            </h5>
+        </a>
+    }
+</div>

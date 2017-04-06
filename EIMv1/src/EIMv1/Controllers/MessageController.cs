@@ -26,9 +26,10 @@ namespace EIMv1.Controllers
         {
             string token = Request.Cookies["ACCESS_TOKEN"];
 
-            var messageViewModel = new MessageViewModel
+            var messageViewModel = new ContentViewModel
             {
-                Users = await _UserRepository.usersAsync(token)
+                Users = await _UserRepository.usersAsync(token),
+                Friend = null
             };
             
             return View(messageViewModel);
@@ -38,16 +39,27 @@ namespace EIMv1.Controllers
         public async Task<IActionResult> Message(string id)
         {
             string token = Request.Cookies["ACCESS_TOKEN"];
+            Debug.WriteLine("in Messages() id is " + id);
 
-            var messageViewModel = new MessageViewModel
+            var contentViewModel = new ContentViewModel
             {
-                Users = await _UserRepository.usersAsync(token)
+                Users = await _UserRepository.usersAsync(token),
+                Friend = id,
+                Messages = await _UserRepository.getMessages(token, id)
             };
-            Debug.WriteLine("second message");
-            return View("Message", messageViewModel);
+            return View(contentViewModel);
         }
 
+        public ViewResult UserList()
+        {
+            return View();
+        }
 
-       
+        public ViewResult Messages()
+        {
+            return View();
+        }
     }
+
+   
 }

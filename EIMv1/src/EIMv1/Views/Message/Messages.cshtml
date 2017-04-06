@@ -7,15 +7,16 @@
     <script>
 
         $(document).ready(function () {
-            LoadUsers();
+            LoadMessages();
 
 
         });
-        
-        function LoadUsers() {
+
+        function LoadMessages(user) {
+            alert(user);
             $.ajax({
                 type: 'GET',
-                url: '/api/MessageData',
+                url: '/api/MessageData/' + user.last_name,
                 dataType: 'json',
                 success: function (jsonData) {
                     if (jsonData == null) {
@@ -26,9 +27,9 @@
                     alert("success");
 
 
-                    $.each(jsonData, function (index, user) {
+                    $.each(jsonData, function (index, message) {
 
-                        var userString = '<p>' + user.first_name + ' </p>';
+                        var userString = '<p>' + message.user_email + ' </p>';
 
 
 

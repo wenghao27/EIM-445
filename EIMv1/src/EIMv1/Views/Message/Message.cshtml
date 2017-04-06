@@ -1,4 +1,4 @@
-﻿@model MessageViewModel
+﻿@model ContentViewModel
 <div id="container">
     <div class="container-fluid message-fill">
         <div class="row message-fill">
@@ -27,7 +27,7 @@
                     <div class="list-group">
                         @foreach (var user in Model.Users.users)
                         {
-                            <a asp-controller="Message" , asp-action="Message" asp-route-id="@user.last_name" class="list-group-item list-group-item-action">
+                            <a asp-controller="Message" asp-action="Message" asp-route-id="@user.last_name"  class="list-group-item list-group-item-action">
                                 <h5>
                                     @user.first_name @user.last_name
                                 </h5>
@@ -42,7 +42,14 @@
                 <div id="message-to">
                     <div class="row">
                         <div class="col-xs-10">
-                            <h4>Hao W.</h4>
+                            @if(Model.Friend == null)
+                            {
+                                <h4>no friend </h4>
+                            }
+                            else
+                            {
+                                <h4>@Model.Friend.ToString()</h4>
+                            }
                         </div>
                         <div class="col-xs-1">
                             <button type="button" class="btn btn-default btn-lg">
@@ -58,13 +65,35 @@
                 </div>
                 <div id="message-remain">
                     <div id="message-messages">
-                        Previous Messages
+                        @if (Model.Messages != null)
+                        {
+                            @if (Model.Messages.messages.Any())
+                            {
+                                @foreach (var message in Model.Messages.messages)
+                                {
+                                    <p>@message.user_email - @message.body</p>
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                <p>No Messages</p>
+                            }
+
+
+                        }
+                        else
+                        {
+
+                        }
                     </div>
                     <div id="message-write">
-                        Sample Message
+                        <textarea id="message-form" ></textarea>
                     </div>
                     <div id="message-lowbar" class="right">
-                        <button type="button" class="btn btn-default btn-lg">
+                        <button type="button" class="btn btn-default btn-lg" id="send-button">
                             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> Send
                         </button>
                     </div>
@@ -79,3 +108,50 @@
         </div>
     </div>
 </div>
+
+
+@section scripts {
+
+    <script>
+        
+
+        $(document).ready(function () {
+
+            $("button#send-button").click(function () {
+                var message = $("textarea").val();
+                Post('@Model.Friend', message);
+
+            });
+
+        });
+
+
+
+        function Post(to, message) {
+            var jsonMessage = {
+                'to' : to,
+                'body': message,
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/MessageData/',
+                data: jsonMessage,
+                contentType: 'application/json',
+                success: function (jsonData) {
+                    if (jsonData == null) {
+                        alert('no data returned');
+                        return;
+
+                    }
+                    alert("success");
+
+
+                },
+                error: function (ex) {
+                    alert(ex);
+                }
+            });
+            return false;
+        }
+    </script>
+}
