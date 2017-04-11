@@ -61,37 +61,23 @@ namespace EIMv1.Models
             {
                 messageList = new MessageList();
                 messageList.messages = Enumerable.Empty<Message>().ToList();
-                Debug.WriteLine("no messages" + messageList.messages.Any());
-            }
-            else
-            {
-                Debug.WriteLine("yes messages " + messageList.messages.Any());
             }
             return messageList;
         }
 
         private async Task<string> conversationIdHelper(string token, string id)
         {
-            Debug.WriteLine("in conversation helper");
-            
             _users = await usersAsync(token);
-            Debug.WriteLine("in conversion helper " + _users.users == null);
             User user = _users.users.Find(x => x.last_name == id);
-            Debug.WriteLine("last name is " + user.last_name);
-
-            //_users.users.Where(x => x.last_name.Equals(id)).FirstOrDefault();
+            
             return user.email;
 
 
         } 
 
-        public async void SendMessage(string token, SendMessage messsage)
+        public async Task<String> SendMessage(string token, SendMessage messsage)
         {
-            Debug.WriteLine("SendMessage() id is " + messsage.to);
-
             string convoId = await createConversation(token, messsage.to);
-            Debug.WriteLine("convoid is " + convoId);
-            Debug.WriteLine("body is " + messsage.body);
             var jsonMessage = new { body = messsage.body, conversation_id = convoId };
             var returnString = await baseUrl
                 .AppendPathSegment("messages")
@@ -99,7 +85,7 @@ namespace EIMv1.Models
                 .WithHeader("Authorization", token)
                 .PostJsonAsync(jsonMessage)
                 .ReceiveString();
-            Debug.WriteLine(returnString);
+            return returnString;
         }
 
 

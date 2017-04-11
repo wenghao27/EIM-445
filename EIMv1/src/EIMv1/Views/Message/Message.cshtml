@@ -91,7 +91,6 @@
 
         $(document).ready(function () {
             $("button#send-button").click(function () {
-                
                 SendMessage();
             });
         });
@@ -117,7 +116,6 @@
                     else {
                         $.each(jsonData, function (index, message) {
                             var messageString = '<p> ' + message.body + '</p>';
-
 
                             $('#message-messages').append(messageString);
                         });

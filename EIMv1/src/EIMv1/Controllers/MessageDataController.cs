@@ -21,43 +21,14 @@ namespace EIMv1.Controllers
             _userRepository = userRepository;  
         }
 
-        //// GET: api/values
-        //[HttpGet]
-        //public async Task<IEnumerable<UserViewModel>> LoadUsers() 
-        //{
-        //    string token = Request.Cookies["ACCESS_TOKEN"];
-
-        //    UserList userList = await _userRepository.usersAsync(token);
-        //    List<UserViewModel> users = new List<UserViewModel>();
-
-        //    foreach (var user in userList.users)
-        //    {
-        //        users.Add(MapRepoUsersToUserViewModel(user));
-        //    }
-        //    return users;
-        //}
-
-        //private UserViewModel MapRepoUsersToUserViewModel(User user)
-        //{   
-
-        //    return new UserViewModel()
-        //    {
-        //        first_name = user.first_name,
-        //        last_name = user.last_name,
-        //        email = user.email
-        //    };
-        //}
-
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IEnumerable<MessageViewModel>> GetMessages(string id)
         {
-            Debug.WriteLine("in get messagesData id is " + id);
             string token = Request.Cookies["ACCESS_TOKEN"];
 
             UserList userList = await _userRepository.usersAsync(token);
             User user = userList.users.Find(x => x.last_name == id);
-            Debug.WriteLine("user is " + user.last_name);
 
             MessageList messageList = await _userRepository.getMessages(token, user.last_name);
 
@@ -68,17 +39,10 @@ namespace EIMv1.Controllers
                 messageViewModels.Add(MapRepoMessagesToMessageViewModels(message));
             }
             return messageViewModels;
-            //id is the user id
-            //serach our users to
-            //find the right user using the id
-            //    creat a convo
-            //    get the convo id
-            //    get the messagesand returnthem
         }
 
         private MessageViewModel MapRepoMessagesToMessageViewModels(Message message)
         {
-            Debug.WriteLine("in MappingtoMessage" + message.body);
             return new MessageViewModel()
             {
                 user_email = message.user_email,
@@ -93,25 +57,12 @@ namespace EIMv1.Controllers
         [HttpPost]
         public async Task<String> Post([FromBody]SendMessageViewModel message)
         {
-            Debug.WriteLine(message.body + "From Post" + "to is " + message.to);
             string token = Request.Cookies["ACCESS_TOKEN"];
             SendMessage sendMessage = new SendMessage();
             sendMessage.body = message.body;
             sendMessage.to = message.to;
             string response = await _userRepository.SendMessage(token, sendMessage);
             return response;
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
     
