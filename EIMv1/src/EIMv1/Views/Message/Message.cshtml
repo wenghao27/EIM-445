@@ -20,17 +20,18 @@
                                 </button>
                             </div>
                         </div>
-                       
                     </div>
                 </div>
                 <div class="message-user-list-remain">
                     <div class="list-group">
                         @foreach (var user in Model.Users.users)
                         {
-                            <a asp-controller="Message" asp-action="Message" asp-route-id="@user.last_name"  class="list-group-item list-group-item-action">
+                            <a onclick="loadMessages('@user.last_name');updateMessageView('@user.last_name', '@user.last_name')"  
+                               class="list-group-item list-group-item-action">
                                 <h5>
                                     @user.first_name @user.last_name
                                 </h5>
+                                
                             </a>
                         }
                     </div>
@@ -41,15 +42,11 @@
             <div class="col-md-height col-xs-9 no-float message-fill panel panel-default message-content">
                 <div id="message-to">
                     <div class="row">
-                        <div class="col-xs-10">
-                            @if(Model.Friend == null)
-                            {
-                                <h4>no friend </h4>
-                            }
-                            else
-                            {
-                                <h4>@Model.Friend.ToString()</h4>
-                            }
+                        <div class="col-xs-10" id="message-friend">
+                            <h4 id="to">
+                            </h4>
+                            <span hidden id="user_id"></span>
+                            
                         </div>
                         <div class="col-xs-1">
                             <button type="button" class="btn btn-default btn-lg">
@@ -65,29 +62,6 @@
                 </div>
                 <div id="message-remain">
                     <div id="message-messages">
-                        @if (Model.Messages != null)
-                        {
-                            @if (Model.Messages.messages.Any())
-                            {
-                                @foreach (var message in Model.Messages.messages)
-                                {
-                                    <p>@message.user_email - @message.body</p>
-
-                                }
-
-                            }
-                            else
-                            {
-
-                                <p>No Messages</p>
-                            }
-
-
-                        }
-                        else
-                        {
-
-                        }
                     </div>
                     <div id="message-write">
                         <textarea id="message-form" ></textarea>
@@ -116,36 +90,67 @@
         
 
         $(document).ready(function () {
-
             $("button#send-button").click(function () {
-                var message = $("textarea").val();
-                Post('@Model.Friend', message);
-
+                
+                SendMessage();
             });
-
         });
 
+        function updateMessageView(to, id) {
+            $('#message-friend').find('h4').text(to);
+            $('#message-friend').find('#user_id').text(id);
+        }
 
-
-        function Post(to, message) {
-            var jsonMessage = {
-                'to' : to,
-                'body': message,
-            };
+        function loadMessages(id) {
+            $('#message-messages').empty();
             $.ajax({
-                type: 'POST',
-                url: '/api/MessageData/',
-                data: jsonMessage,
-                contentType: 'application/json',
+                type: 'GET',
+                url: '/api/MessageData/' + id,
+                datatype: 'json',
                 success: function (jsonData) {
                     if (jsonData == null) {
                         alert('no data returned');
                         return;
-
                     }
-                    alert("success");
+                    if (jsonData.length == 0) {
+                    }
+                    else {
+                        $.each(jsonData, function (index, message) {
+                            var messageString = '<p> ' + message.body + '</p>';
 
 
+                            $('#message-messages').append(messageString);
+                        });
+                    }
+
+                },
+                error: function (ex) {
+                    alert(ex);
+                }
+            });
+            return false;
+        }
+
+        function SendMessage() {
+            var to = $('#message-friend').find('#user_id').text();
+            var message = $("textarea").val();
+            $("textarea").val('');
+            var jsonMessage = {
+                'body': message,
+                'to' : to
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/MessageData/',
+                data: JSON.stringify(jsonMessage),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (jsonData) {
+                    if (jsonData == null) {
+                        alert('no data returned');
+                        return;
+                    }
+                    $('#message-messages').append('<p>' + message + '</p>');
                 },
                 error: function (ex) {
                     alert(ex);

@@ -7,8 +7,9 @@ namespace EIMv1.ViewModels
 {
     public class SendMessageViewModel
     {
-        public string to { get; set; }
         public string body { get; set; }
+        public string to { get; set; }
+        
 
         //public string conversation_id { get; set; }
 

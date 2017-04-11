@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Flurl.Http;
 using Flurl;
 using System.Diagnostics;
+using EIMv1.ViewModels;
 
 namespace EIMv1.Models
 {
@@ -24,7 +25,6 @@ namespace EIMv1.Models
                 .WithHeader("Authorization", token)
                 .GetAsync()
                 .ReceiveJson<UserList>();
-            _users = userList;
             return userList;
             
         }
@@ -72,11 +72,10 @@ namespace EIMv1.Models
 
         private async Task<string> conversationIdHelper(string token, string id)
         {
-            if(_users.users == null)
-            {
-                _users = await usersAsync(token);
-
-            }
+            Debug.WriteLine("in conversation helper");
+            
+            _users = await usersAsync(token);
+            Debug.WriteLine("in conversion helper " + _users.users == null);
             User user = _users.users.Find(x => x.last_name == id);
             Debug.WriteLine("last name is " + user.last_name);
 
@@ -84,6 +83,23 @@ namespace EIMv1.Models
             return user.email;
 
 
+        } 
+
+        public async void SendMessage(string token, SendMessage messsage)
+        {
+            Debug.WriteLine("SendMessage() id is " + messsage.to);
+
+            string convoId = await createConversation(token, messsage.to);
+            Debug.WriteLine("convoid is " + convoId);
+            Debug.WriteLine("body is " + messsage.body);
+            var jsonMessage = new { body = messsage.body, conversation_id = convoId };
+            var returnString = await baseUrl
+                .AppendPathSegment("messages")
+                .AppendPathSegment("create")
+                .WithHeader("Authorization", token)
+                .PostJsonAsync(jsonMessage)
+                .ReceiveString();
+            Debug.WriteLine(returnString);
         }
 
 

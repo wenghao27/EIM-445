@@ -39,7 +39,7 @@ namespace EIMv1.Controllers
 
         //private UserViewModel MapRepoUsersToUserViewModel(User user)
         //{   
-            
+
         //    return new UserViewModel()
         //    {
         //        first_name = user.first_name,
@@ -48,53 +48,58 @@ namespace EIMv1.Controllers
         //    };
         //}
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public async Task<IEnumerable<MessageViewModel>> GetMessages(string id)
-        //{
-            
-        //    string token = Request.Cookies["ACCESS_TOKEN"];
+        // GET api/values/5
+        [HttpGet("{id}")]
+        public async Task<IEnumerable<MessageViewModel>> GetMessages(string id)
+        {
+            Debug.WriteLine("in get messagesData id is " + id);
+            string token = Request.Cookies["ACCESS_TOKEN"];
 
-        //    UserList userList = await _userRepository.usersAsync(token);
-        //    User user = userList.users.Find(x => x.last_name.Equals(id));
-        //    string conversationID = await _userRepository.createConversation(token, user.email);
-        
+            UserList userList = await _userRepository.usersAsync(token);
+            User user = userList.users.Find(x => x.last_name == id);
+            Debug.WriteLine("user is " + user.last_name);
 
-        //    MessageList messageList = await _userRepository.getMessages(token, conversationID);
+            MessageList messageList = await _userRepository.getMessages(token, user.last_name);
 
-        //    List<MessageViewModel> messageViewModels = new List<MessageViewModel>();
+            List<MessageViewModel> messageViewModels = new List<MessageViewModel>();
 
-        //    foreach(var message in messageList.messages)
-        //    {
-        //        messageViewModels.Add(MapRepoMessagesToMessageViewModels(message));
-        //    }
-        //    return messageViewModels;
-        //    //id is the user id
-        //    //serach our users to
-        //    //find the right user using the id
-        //    //    creat a convo
-        //    //    get the convo id
-        //    //    get the messagesand returnthem
-        //}
+            foreach (var message in messageList.messages)
+            {
+                messageViewModels.Add(MapRepoMessagesToMessageViewModels(message));
+            }
+            return messageViewModels;
+            //id is the user id
+            //serach our users to
+            //find the right user using the id
+            //    creat a convo
+            //    get the convo id
+            //    get the messagesand returnthem
+        }
 
-        //private MessageViewModel MapRepoMessagesToMessageViewModels(Message message)
-        //{
-        //    return new MessageViewModel()
-        //    {
-        //        //user_email = message.user_email,
-        //        //conversation_id = message.conversation_id,
-        //        //created_at = message.created_at,
-        //        //user_id = message.user_id
-        //    };
-        //}
+        private MessageViewModel MapRepoMessagesToMessageViewModels(Message message)
+        {
+            Debug.WriteLine("in MappingtoMessage" + message.body);
+            return new MessageViewModel()
+            {
+                user_email = message.user_email,
+                conversation_id = message.conversation_id,
+                created_at = message.created_at,
+                user_id = message.user_id,
+                body = message.body
+            };
+        }
 
         // POST api/values
         [HttpPost]
-        public void Post(SendMessageViewModel value)
+        public async Task<String> Post([FromBody]SendMessageViewModel message)
         {
-            //TODO: currently not giving the right values
-            Debug.WriteLine("ss" + value.body + " In Post\n\n" + value.to);
-            //encrypt and call api
+            Debug.WriteLine(message.body + "From Post" + "to is " + message.to);
+            string token = Request.Cookies["ACCESS_TOKEN"];
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.body = message.body;
+            sendMessage.to = message.to;
+            string response = await _userRepository.SendMessage(token, sendMessage);
+            return response;
         }
 
         // PUT api/values/5
