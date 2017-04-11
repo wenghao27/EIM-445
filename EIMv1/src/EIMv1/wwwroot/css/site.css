@@ -180,9 +180,6 @@ div#message-messages {
     
 }
 
-#message-friend h4 {
-    visibility: hidden;
-}
 
 #message-write {
     height: 50%;
@@ -197,10 +194,6 @@ div#message-messages {
 
 div#container {
     height: 100%;
-}
-
-span#user_id {
-    visibility: hidden;
 }
 
 /*message-create*/
