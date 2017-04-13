@@ -1,4 +1,4 @@
-﻿@model MessageViewModel
+﻿@model ContentViewModel
 <div id="container">
     <div class="container-fluid message-fill">
         <div class="row message-fill">
@@ -20,29 +20,33 @@
                                 </button>
                             </div>
                         </div>
-                       
                     </div>
                 </div>
                 <div class="message-user-list-remain">
-                    <ul class="list-group">
+                    <div class="list-group">
                         @foreach (var user in Model.Users.users)
                         {
-                            <li class="list-group-item" style="border: none">
-                                <span class="badge">1</span>
-                                @user.first_name @user.last_name
-                            </li>
-
+                            <a onclick="loadMessages('@user.last_name');updateMessageView('@user.last_name', '@user.last_name')"  
+                               class="list-group-item list-group-item-action">
+                                <h5>
+                                    @user.first_name @user.last_name
+                                </h5>
+                                
+                            </a>
                         }
-                    </ul>
-                </div>
+                    </div>
+              </div>
                 
             </div>
 
             <div class="col-md-height col-xs-9 no-float message-fill panel panel-default message-content">
                 <div id="message-to">
                     <div class="row">
-                        <div class="col-xs-10">
-                            <h4>Hao W.</h4>
+                        <div class="col-xs-10" id="message-friend">
+                            <h4>
+                            </h4>
+                            <span hidden id="user_id"></span>
+                            
                         </div>
                         <div class="col-xs-1">
                             <button type="button" class="btn btn-default btn-lg">
@@ -58,13 +62,12 @@
                 </div>
                 <div id="message-remain">
                     <div id="message-messages">
-                        Previous Messages
                     </div>
                     <div id="message-write">
-                        Sample Message
+                        <textarea id="message-form" ></textarea>
                     </div>
                     <div id="message-lowbar" class="right">
-                        <button type="button" class="btn btn-default btn-lg">
+                        <button type="button" class="btn btn-default btn-lg" id="send-button">
                             <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> Send
                         </button>
                     </div>
@@ -79,3 +82,79 @@
         </div>
     </div>
 </div>
+
+
+@section scripts {
+
+    <script>
+        
+
+        $(document).ready(function () {
+            $("button#send-button").click(function () {
+                SendMessage();
+            });
+        });
+
+        function updateMessageView(to, id) {
+            $('#message-friend').find('h4').text(to);
+            $('#message-friend').find('#user_id').text(id);
+        }
+
+        function loadMessages(id) {
+            $('#message-messages').empty();
+            $.ajax({
+                type: 'GET',
+                url: '/api/MessageData/' + id,
+                datatype: 'json',
+                success: function (jsonData) {
+                    if (jsonData == null) {
+                        alert('no data returned');
+                        return;
+                    }
+                    if (jsonData.length == 0) {
+                    }
+                    else {
+                        $.each(jsonData, function (index, message) {
+                            var messageString = '<p> ' + message.body + '</p>';
+
+                            $('#message-messages').append(messageString);
+                        });
+                    }
+
+                },
+                error: function (ex) {
+                    alert(ex);
+                }
+            });
+            return false;
+        }
+
+        function SendMessage() {
+            var to = $('#message-friend').find('#user_id').text();
+            var message = $("textarea").val();
+            $("textarea").val('');
+            var jsonMessage = {
+                'body': message,
+                'to' : to
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/api/MessageData/',
+                data: JSON.stringify(jsonMessage),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (jsonData) {
+                    if (jsonData == null) {
+                        alert('no data returned');
+                        return;
+                    }
+                    $('#message-messages').append('<p>' + message + '</p>');
+                },
+                error: function (ex) {
+                    alert(ex);
+                }
+            });
+            return false;
+        }
+    </script>
+}
