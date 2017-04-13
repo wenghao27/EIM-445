@@ -88,21 +88,28 @@ code {
     width: 100%;
 }
 .list-group {
-    padding: 10px;
+    padding: 0px;
     height: 100%;
+    margin-bottom: 0px;
    
 }
 
 .list-group-item {
+    border: none;
+}
+
+.list-group a {
+    text-align: center;
     min-height: 45px;
 }
 
 .message-user-list-remain {
-    padding: 10px;
+    padding: 0px;
     position: absolute;
     top: 50px;
     bottom: 0;
     width: 100%;
+    overflow-y: scroll;
 }
 
 /*Message*/
@@ -136,6 +143,7 @@ code {
     height: 45px;
 }
 
+
 #message-to .row {
     margin-left: 0px;
     margin-right: 0px;
@@ -165,11 +173,13 @@ code {
     width: 100%;
 }
 
-#message-messages {
+div#message-messages {
+    overflow-y: scroll;
     height: 45%;
     border-bottom: 1px solid #484848;
     
 }
+
 
 #message-write {
     height: 50%;
@@ -186,5 +196,9 @@ div#container {
     height: 100%;
 }
 
-/*Search*/
+/*message-create*/
 
+textarea#message-form {
+    height: 100%;
+    width: 100%;
+}
