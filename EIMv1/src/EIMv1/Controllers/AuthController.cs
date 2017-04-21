@@ -12,6 +12,8 @@ using Flurl;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 
+//TODO: generate dummy test.txt file and prompt browser to download the file after a successful signup request
+
 namespace EIMv1.Controllers.Web
 {
     public class AuthController : Controller
@@ -89,12 +91,35 @@ namespace EIMv1.Controllers.Web
             return false;
         }
 
+        public IActionResult downloadFile(string filepath, SignupViewModel model)
+        {
+            FileContentResult result = new FileContentResult(System.IO.File.ReadAllBytes(filepath), "text/plain")
+            {
+                FileDownloadName = model.Username + ".txt"
+            };
+
+            return result;
+        }
+
         [HttpPost]
         public async Task<bool> PublishPublicKey(SignupViewModel model)
         {
             byte[] keyPair = Encryption.RSAService.RSAKeyGeneration();
             byte[] publicKey = Encryption.RSAService.RSAPublicKeyOnly(keyPair);
             String publicKeyStr = Encryption.RSAService.convertToString(publicKey);
+            String keyPairStr = Encryption.RSAService.convertToString(keyPair);
+
+            
+
+            //var keyfilePath = System.IO.Path.GetTempFileName();
+            //var keyfile = System.IO.File.Create(keyfilePath);
+            //var keyWriter = new System.IO.StreamWriter(keyfile);
+            //keyWriter.WriteLine(keyPairStr);
+            //keyWriter.Dispose();
+
+            
+
+
             //Debug.WriteLine("Public key: " + publicKeyStr);
             var postParams = new KeyPost();
             postParams.user = model.Username.ToString();
@@ -109,6 +134,8 @@ namespace EIMv1.Controllers.Web
                     var response = await client.PostAsync("https://chronoskeys.co/api/PublicKey", content);
                     if (response.IsSuccessStatusCode)
                     {
+                        //HttpContext.Response.ContentType = "text/plain";
+                        //IActionResult kp = downloadFile(keyfilePath, model);
                         return true;
                     }
                 }
@@ -121,33 +148,9 @@ namespace EIMv1.Controllers.Web
             {
                 Debug.WriteLine(ex.ToString());
             }
-
-
-            //try
-            //{
-            //    var responseMessage = await "https://chronoskeys.co/api/PublicKey".PostUrlEncodedAsync(new
-            //    {
-            //        user = model.Username.ToString(),
-            //        key = publicKeyStr
-            //    });
-            //    if (responseMessage.StatusCode.Equals(200))
-            //    {
-            //        return true;
-            //    }
-            //}
-            //catch (FlurlHttpException ex)
-            //{
-            //    Debug.WriteLine(ex.ToString());
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine(ex.ToString());
-            //}
             return false;
         }
 
-            
-        
 
         [HttpPost]
         public async Task<IActionResult> SignUp(SignupViewModel model)
@@ -173,6 +176,12 @@ namespace EIMv1.Controllers.Web
                             });
                             if (responseMessage.IsSuccessStatusCode)
                             {
+                                //var keyfilePath = System.IO.Path.GetTempFileName();
+                                //var keyfile = System.IO.File.Create(keyfilePath);
+                                //var keyWriter = new System.IO.StreamWriter(keyfile);
+                                //keyWriter.WriteLine("keypair");
+                                //keyWriter.Dispose();
+
                                 return RedirectToAction("Login", "Auth");
                             }
                         }
