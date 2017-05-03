@@ -21,59 +21,59 @@ namespace EIMv1.Encryption
                     // Export key pair (public and private)
                     byte[] keyPair = RSA.ExportCspBlob(true);
 
-                    // Export public key only
-                    byte[] publicKey = RSA.ExportCspBlob(false);
+                    //// Export public key only
+                    //byte[] publicKey = RSA.ExportCspBlob(false);
 
-                    // Convert key pair into a base 64 string
-                    string keyPairString = convertToString(keyPair);
+                    //// Convert key pair into a base 64 string
+                    //string keyPairString = convertToString(keyPair);
 
-                    // Convert public key into a base 64 string
-                    string publicKeyString = convertToString(publicKey);
+                    //// Convert public key into a base 64 string
+                    //string publicKeyString = convertToString(publicKey);
 
-                    // Write key pair to console for demo purposes
-                    Debug.WriteLine("Key Pair: " + keyPairString);
-                    Debug.WriteLine("Public: " + publicKeyString);
+                    //// Write key pair to console for demo purposes
+                    //Debug.WriteLine("Key Pair: " + keyPairString);
+                    //Debug.WriteLine("Public: " + publicKeyString);
 
-                    // BYTE TO STRING AND BACK TO BYTE TEST
-                    // BEGIN
-                    byte[] test1 = convertToBytes(keyPairString);
-                    byte[] test2 = convertToBytes(publicKeyString);
+                    //// BYTE TO STRING AND BACK TO BYTE TEST
+                    //// BEGIN
+                    //byte[] test1 = convertToBytes(keyPairString);
+                    //byte[] test2 = convertToBytes(publicKeyString);
 
-                    string keyPairString2 = convertToString(test1);
-                    string publicKeyString2 = convertToString(test2);
+                    //string keyPairString2 = convertToString(test1);
+                    //string publicKeyString2 = convertToString(test2);
 
-                    Debug.WriteLine("Private Test: " + keyPairString2);
-                    Debug.WriteLine("Public Test: " + publicKeyString2);
+                    //Debug.WriteLine("Private Test: " + keyPairString2);
+                    //Debug.WriteLine("Public Test: " + publicKeyString2);
 
-                    if (keyPairString == keyPairString2)
-                    {
-                        if (publicKeyString == publicKeyString2)
-                        {
-                            Debug.WriteLine("Key convertion from bytes to string and back is successful");
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Key convertion from bytes to string and back failed");
-                    }
-                    // END
-                    // BYTE TO STRING AND BACK TO BYTE TEST
+                    //if (keyPairString == keyPairString2)
+                    //{
+                    //    if (publicKeyString == publicKeyString2)
+                    //    {
+                    //        Debug.WriteLine("Key convertion from bytes to string and back is successful");
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    Debug.WriteLine("Key convertion from bytes to string and back failed");
+                    //}
+                    //// END
+                    //// BYTE TO STRING AND BACK TO BYTE TEST
 
-                    // ENCRYPT AND DECRYPT TEST
-                    // BEGIN
-                    string aeskeysample = "hello world";
-                    byte[] aeskeysamplebytes = encodeStringtoBytes(aeskeysample);
-                    string aeskeysamplestring = convertToString(aeskeysamplebytes);
-                    byte[] aeskeysampletoBase64bytes = convertToBytes(aeskeysamplestring);
-                    byte[] encryptedkey = RSAEncrypt(publicKey, aeskeysampletoBase64bytes);
-                    string encryptedkeystring = convertToString(encryptedkey);
-                    Debug.WriteLine("Encrypted 'hello world': " + encryptedkeystring);
-                    byte[] encryptedkeybytes = convertToBytes(encryptedkeystring);
-                    byte[] decryptedkey = RSADecrypt(keyPair, encryptedkeybytes);
-                    string decryptedkeystring = encodeBytestoString(decryptedkey);
-                    Debug.WriteLine("Decrypted 'hello world': " + decryptedkeystring);
-                    // END
-                    // ENCRYPT AND DECRYPT TEST
+                    //// ENCRYPT AND DECRYPT TEST
+                    //// BEGIN
+                    //string aeskeysample = "hello world";
+                    //byte[] aeskeysamplebytes = encodeStringtoBytes(aeskeysample);
+                    //string aeskeysamplestring = convertToString(aeskeysamplebytes);
+                    //byte[] aeskeysampletoBase64bytes = convertToBytes(aeskeysamplestring);
+                    //byte[] encryptedkey = RSAEncrypt(publicKey, aeskeysampletoBase64bytes);
+                    //string encryptedkeystring = convertToString(encryptedkey);
+                    //Debug.WriteLine("Encrypted 'hello world': " + encryptedkeystring);
+                    //byte[] encryptedkeybytes = convertToBytes(encryptedkeystring);
+                    //byte[] decryptedkey = RSADecrypt(keyPair, encryptedkeybytes);
+                    //string decryptedkeystring = encodeBytestoString(decryptedkey);
+                    //Debug.WriteLine("Decrypted 'hello world': " + decryptedkeystring);
+                    //// END
+                    //// ENCRYPT AND DECRYPT TEST
 
                     return keyPair;
                 }
@@ -131,6 +131,34 @@ namespace EIMv1.Encryption
         {
             byte[] bytes;
             return bytes = Convert.FromBase64String(str);
+        }
+
+        /// <summary>
+        /// Extract public key from RSA key pair blob.
+        /// </summary>
+        /// <param name="keyPair">RSA key pair blob.</param>
+        /// <returns>Public key from RSA key pair.</returns>
+        public static byte[] RSAPublicKeyOnly(byte[] keyPair)
+        {
+            try
+            {
+                using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider(2048))
+                {
+
+                    RSA.ImportCspBlob(keyPair);
+                    byte[] publicKey = RSA.ExportCspBlob(false);
+                    return publicKey;
+                }
+
+            }
+            catch (CryptographicException e)
+            {
+                //Catch this exception in case the encryption did
+                //not succeed.
+                Console.WriteLine(e.Message);
+                return null;
+
+            }
         }
 
         /// <summary>
