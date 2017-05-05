@@ -24,8 +24,7 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Flurl.Http": "1.1.1",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
-    "System.Security.Cryptography.Csp": "4.3.0",
-    "Microsoft.AspNetCore.Http.Extensions": "1.1.0"
+    "System.Security.Cryptography.Csp": "4.3.0"
   },
 
   "tools": {
